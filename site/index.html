@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내 체형은 무슨 유형? — 치수로 보는 체형 테스트</title>
+<meta name="description" content="가슴·허리·엉덩이 치수 세 개로 내 체형 유형을 알아보는 1분 테스트. 유형별 특징, 어울리는 핏, 허리·엉덩이 비율 건강 메모까지. 입력값은 저장되지 않습니다.">
+<meta property="og:title" content="내 체형은 무슨 유형?">
+<meta property="og:description" content="치수 세 개로 알아보는 1분 체형 테스트 — 유형명이 재미있어요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff7f0; --card:#ffffff; --ink:#2b2420; --muted:#7a6a62; --line:#f0e3d9;
+    --accent:#ff6b6b; --accent2:#ffa26b; --accent3:#6bc5ff; --good:#2f9e6f; --warn:#d9822b;
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,sans-serif;line-height:1.6}
+  body{min-height:100dvh;display:flex;flex-direction:column}
+  main{flex:1;width:100%;max-width:520px;margin:0 auto;padding:20px 16px 40px}
+  header.hero{text-align:center;padding:28px 8px 12px}
+  .eyebrow{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12px;color:var(--muted);font-weight:500}
+  h1{font-size:clamp(26px,7vw,34px);line-height:1.25;margin:14px 0 8px;font-weight:900;letter-spacing:-.5px}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:15px;margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-top:16px;box-shadow:0 8px 30px rgba(80,40,20,.06)}
+  .steps{display:flex;gap:6px;justify-content:center;margin:18px 0 4px}
+  .steps span{width:28px;height:4px;border-radius:2px;background:var(--line)}
+  .steps span.on{background:var(--accent)}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .seg button{padding:16px 10px;border:2px solid var(--line);border-radius:16px;background:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .seg button[aria-pressed="true"]{border-color:var(--accent);background:#fff1f1}
+  label.f{display:block;margin-top:14px;font-weight:700;font-size:15px}
+  label.f small{display:block;color:var(--muted);font-weight:400;font-size:13px;margin-top:2px}
+  .in{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .in input{flex:1;font:inherit;font-size:20px;font-weight:700;padding:12px 14px;border:2px solid var(--line);border-radius:14px;outline:none;min-width:0;color:var(--ink);background:#fff}
+  .in input:focus{border-color:var(--accent3)}
+  .in .u{color:var(--muted);font-weight:700;width:28px}
+  .opt{margin-top:14px;color:var(--muted);font-size:13px}
+  .btn{display:block;width:100%;margin-top:20px;padding:16px;border:0;border-radius:16px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font:inherit;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px rgba(255,107,107,.3)}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none;font-weight:700}
+  .btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+  .err{color:#c0392b;font-size:13px;margin-top:8px;min-height:18px}
+  .hidden{display:none !important}
+  /* 결과 */
+  .result-top{text-align:center;padding:8px 0 4px}
+  .emoji{font-size:64px;line-height:1}
+  .tname{font-size:clamp(24px,7vw,30px);font-weight:900;margin:8px 0 4px;letter-spacing:-.5px}
+  .tagline{color:var(--muted);margin:0;font-size:15px}
+  .badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:#f3f0ff;color:#5a4bd1;font-weight:700;margin-top:10px}
+  h2{font-size:16px;margin:22px 0 8px;display:flex;align-items:center;gap:8px}
+  h2 .tag{font-size:11px;font-weight:700;color:#fff;background:#9b8ea3;border-radius:999px;padding:2px 8px}
+  h2 .tag.fun{background:var(--accent2)}
+  h2 .tag.sci{background:var(--good)}
+  ul.list{margin:0;padding-left:18px}
+  ul.list li{margin:6px 0}
+  .fit{display:grid;grid-template-columns:72px 1fr;gap:6px 12px;font-size:14.5px}
+  .fit b{color:var(--muted);font-weight:700}
+  .health{background:#f3faf6;border:1px solid #cfeadb;border-radius:14px;padding:12px 14px;font-size:14px}
+  .health .n{font-size:22px;font-weight:900}
+  .health.w{background:#fff7ec;border-color:#f3d9b5}
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  footer{max-width:520px;margin:0 auto;padding:16px 16px 36px;color:var(--muted);font-size:12.5px}
+  footer a{color:inherit}
+  details summary{cursor:pointer;font-weight:700;color:var(--ink)}
+  .teaser{margin-top:16px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#eef7ff,#f6f0ff);font-size:14px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:.25s;pointer-events:none}
+  .toast.on{opacity:1}
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <span class="eyebrow">1분 체형 테스트 · 입력값 저장 안 함</span>
+    <h1>내 체형은<br><em>무슨 유형</em>일까?</h1>
+    <p class="sub">가슴·허리·엉덩이 치수 세 개면 끝. MBTI처럼 유형명으로 알려 드려요.</p>
+  </header>
+
+  <!-- 1단계: 성별 -->
+  <section id="step1" class="card">
+    <div class="steps"><span class="on"></span><span></span><span></span></div>
+    <p style="margin:12px 0 0;font-weight:700">어느 기준으로 볼까요?</p>
+    <p class="opt" style="margin-top:4px">여성 기준은 의류학 연구(FFIT)의 9가지 체형을, 남성 기준은 패션 업계에서 쓰는 5가지 체형을 따릅니다.</p>
+    <div class="seg" role="group" aria-label="기준 선택">
+      <button type="button" data-g="f" aria-pressed="false">👩 여성 기준</button>
+      <button type="button" data-g="m" aria-pressed="false">👨 남성 기준</button>
+    </div>
+  </section>
+
+  <!-- 2단계: 치수 -->
+  <section id="step2" class="card hidden">
+    <div class="steps"><span class="on"></span><span class="on"></span><span></span></div>
+    <p style="margin:12px 0 0;font-weight:700">줄자로 재서 cm로 넣어 주세요</p>
+    <p class="opt" style="margin-top:4px">옷 위가 아니라 몸에 가볍게 닿게. 숨을 편하게 내쉰 상태에서.</p>
+
+    <label class="f" id="l-bust">가슴둘레<small>가장 볼록한 지점을 수평으로 한 바퀴</small></label>
+    <div class="in"><input id="bust" type="number" inputmode="decimal" min="50" max="200" step="0.5" placeholder="예: 88"><span class="u">cm</span></div>
+
+    <label class="f" id="l-shoulder" style="display:none">어깨둘레<small>양 어깨 끝을 지나 몸 전체를 한 바퀴 (선택)</small></label>
+    <div class="in" id="in-shoulder" style="display:none"><input id="shoulder" type="number" inputmode="decimal" min="60" max="220" step="0.5" placeholder="예: 112"><span class="u">cm</span></div>
+
+    <label class="f">허리둘레<small>갈비뼈 아래와 골반뼈 위의 중간, 가장 가는 곳</small></label>
+    <div class="in"><input id="waist" type="number" inputmode="decimal" min="40" max="200" step="0.5" placeholder="예: 70"><span class="u">cm</span></div>
+
+    <label class="f">엉덩이둘레<small>엉덩이가 가장 나온 지점을 수평으로</small></label>
+    <div class="in"><input id="hip" type="number" inputmode="decimal" min="50" max="200" step="0.5" placeholder="예: 96"><span class="u">cm</span></div>
+
+    <label class="f" id="l-highhip">윗엉덩이둘레 <small>허리에서 손가락 네 개쯤(약 10cm) 아래. 비워도 됩니다 — 스푼형 판별에만 쓰여요.</small></label>
+    <div class="in" id="in-highhip"><input id="highhip" type="number" inputmode="decimal" min="50" max="200" step="0.5" placeholder="선택"><span class="u">cm</span></div>
+
+    <div class="err" id="err"></div>
+    <button class="btn" id="go" type="button">내 유형 보기 →</button>
+    <button class="btn ghost" id="back1" type="button">← 기준 다시 고르기</button>
+  </section>
+
+  <!-- 3단계: 결과 -->
+  <section id="result" class="card hidden">
+    <div class="steps"><span class="on"></span><span class="on"></span><span class="on"></span></div>
+    <div class="result-top">
+      <div class="emoji" id="r-emoji"></div>
+      <div class="tname" id="r-name"></div>
+      <p class="tagline" id="r-tag"></p>
+      <span class="badge" id="r-badge"></span>
+    </div>
+
+    <h2>이런 체형이에요 <span class="tag sci">치수 기준</span></h2>
+    <p id="r-desc" style="margin:0;font-size:15px"></p>
+
+    <h2>재미로 보는 특징 <span class="tag fun">재미</span></h2>
+    <ul class="list" id="r-fun"></ul>
+    <p class="note">성격·식습관은 체형과 과학적으로 연결되지 않습니다. 심리테스트처럼 재미로만 보세요.</p>
+
+    <h2>이 핏이 잘 받아요 <span class="tag">스타일</span></h2>
+    <div class="fit" id="r-fit"></div>
+
+    <h2>허리·엉덩이 비율 메모 <span class="tag sci">건강</span></h2>
+    <div class="health" id="r-health"></div>
+    <p class="note">세계보건기구(WHO)는 허리/엉덩이 비율이 여성 0.85, 남성 0.90을 넘으면 복부 지방이 많은 쪽으로 봅니다. 체질량·허리둘레와 함께 봐야 하고, 진단은 아닙니다.</p>
+
+    <div class="row">
+      <button class="btn" id="share" type="button">결과 공유</button>
+      <button class="btn ghost" id="retry" type="button">다시 하기</button>
+    </div>
+    <div class="teaser">👗 <b>다음 단계:</b> 이 치수로 "팔뚝은 넉넉, 허리는 핏되게" 같은 원하는 핏에 맞는 옷을 찾아 주는 앱을 준비 중이에요.</div>
+  </section>
+</main>
+
+<footer>
+  <details>
+    <summary>어떻게 나누나요? (출처)</summary>
+    <p>여성 기준은 미국 노스캐롤라이나주립대 연구진이 3D 신체 스캔으로 만든 <b>FFIT(Female Figure Identification Technique for Apparel)</b>의 9가지 체형 분류를 따릅니다(Simmons·Istook·Devarajan, 2004; 수식화는 Lee·Istook·Nam·Park, 2007). 가슴·허리·엉덩이 차이를 인치 기준으로 보기 때문에 cm 입력을 변환해 판정합니다. 후속 연구는 치수 재는 위치에 따라 결과가 달라질 수 있고(Manchester, 2021), 플러스사이즈에서는 분류가 어긋날 수 있다고 지적합니다(Sokolowski 외, 2020). 그래서 이 테스트는 <b>재미와 참고용</b>입니다.</p>
+    <p>남성 기준은 학계에 통일된 분류가 없어, 패션 업계에서 널리 쓰는 5가지 체형(역삼각·사다리꼴·직선·삼각·타원)을 같은 치수 차이 규칙으로 나눕니다. 2023년 남성 상체 연구(Journal of Engineered Fibers and Fabrics)에서는 직선형이 가장 많고 역삼각형에 가까운 유형이 그다음으로 많았습니다.</p>
+    <p>허리/엉덩이 비율 기준은 WHO 전문가 회의(2008)의 여성 0.85·남성 0.90입니다. 동아시아인에게는 더 낮은 기준이 제안되기도 합니다.</p>
+    <p>참고: <a href="https://repository.lib.ncsu.edu/items/35fb969e-9394-4307-8799-e42f957e76b8" target="_blank" rel="noopener">FFIT 검증 연구(NCSU)</a> · <a href="https://research.manchester.ac.uk/en/publications/assessing-the-female-figure-identification-techniques-reliability/" target="_blank" rel="noopener">FFIT 신뢰성 평가(Manchester, 2021)</a> · <a href="https://scholarsbank.uoregon.edu/xmlui/handle/1794/25863" target="_blank" rel="noopener">플러스사이즈 FFIT 수정(2020)</a> · <a href="https://doaj.org/article/1580506fc73144bead81e92f9bb91495" target="_blank" rel="noopener">남성 상체 체형 연구(2023)</a> · <a href="https://www.healthline.com/health/waist-to-hip-ratio" target="_blank" rel="noopener">허리/엉덩이 비율(Healthline)</a></p>
+  </details>
+  <p>입력한 치수는 이 브라우저 안에서만 계산되고 어디에도 저장·전송되지 않습니다. 공유 링크에는 유형 이름만 담깁니다.</p>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// 판정 규칙. FFIT 는 인치 차이로 정의되어 있어 cm → inch 로 바꿔 비교한다 (1 inch = 2.54 cm).
+//   핵심 수치: 가슴·엉덩이 차 3.6in, 가슴–허리 9in, 엉덩이–허리 10in, 스푼 판별 윗엉덩이/허리 1.193.
+//   다이아몬드·타원은 원 논문이 복부 치수를 쓰는데 여기선 "허리가 가슴·엉덩이 둘 다보다 큰 경우" 로 묶는다(플러스사이즈 수정 연구의 방식).
+const IN = 2.54;
+function classifyF(b, w, h, hh) {
+  const B = b / IN, W = w / IN, H = h / IN, HH = hh ? hh / IN : null;
+  const hb = H - B, bh = B - H, bw = B - W, hw = H - W;
+  if (W >= B && W >= H) return 'oval';                                            // 복부가 가장 큼
+  if (bh <= 1 && hb < 3.6 && (bw >= 9 || hw >= 10)) return 'hourglass';
+  if (hb >= 3.6 && hb < 10 && hw >= 9 && (HH === null || HH / W < 1.193)) return 'bottom_hourglass';
+  if (bh > 1 && bh < 10 && bw >= 9) return 'top_hourglass';
+  if (hb > 2 && hw >= 7 && HH !== null && HH / W >= 1.193) return 'spoon';
+  if (hb < 3.6 && bh < 3.6 && bw < 9 && hw < 10) return 'rectangle';
+  if (hb >= 3.6 && hw < 9) return 'triangle';
+  if (bh >= 3.6 && bw < 9) return 'inverted_triangle';
+  if (hb >= 3.6) return 'bottom_hourglass';                                        // 큰 엉덩이 + 큰 허리 낙폭
+  if (bh >= 3.6) return 'top_hourglass';
+  return 'rectangle';
+}
+// 남성: 같은 인치 차이 규칙을 가슴(또는 어깨)·허리·엉덩이에 적용. 학계 표준이 없어 업계 5분류를 쓴다.
+function classifyM(c, w, h, sh) {
+  const top = sh ? Math.max(sh - 20, c) : c;   // 어깨둘레는 가슴둘레보다 보통 20cm 쯤 크다 — 보정해 상체 폭으로 쓴다
+  const T = top / IN, W = w / IN, H = h / IN;
+  const th = T - H, ht = H - T, tw = T - W;
+  if (W >= T && W >= H) return 'm_oval';
+  if (th >= 3.6 && tw >= 9) return 'm_inverted';
+  if (th >= 1 && tw >= 6) return 'm_trapezoid';
+  if (ht >= 3.6) return 'm_triangle';
+  return 'm_rect';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 유형 카드. fun 은 재미(과학적 근거 없음), fit 은 일반적인 스타일링 조언, desc 는 치수 기준 설명.
+const TYPES = {
+  hourglass: { e:'🕰️', name:'황금비 모래시계형', tag:'가슴과 엉덩이가 비슷하고 허리가 쏙 들어간, 교과서 같은 곡선',
+    badge:'FFIT · Hourglass', desc:'가슴둘레와 엉덩이둘레 차이가 2.5cm 안쪽이고, 허리가 가슴보다 23cm 이상(또는 엉덩이보다 25cm 이상) 가늘어요. 위아래 균형이 잡힌 체형이라 허리선을 살리는 옷이 그대로 받아요.',
+    fun:['"어울리는 옷이 많다"는 말을 자주 듣지만, 정작 본인은 늘 "입을 게 없다"고 함.','균형 감각이 좋아서 식단도 한 끼 폭식보다 세 끼 골고루 쪽. 다만 디저트는 별도 칸막이가 있음.','팀에서 조율자 역할. 양쪽 말을 다 듣고 중간을 찾는 편.'],
+    fit:[['상의','허리선이 드러나는 핏. 랩 원피스, 벨트 코디'],['하의','하이웨이스트, 부츠컷·스트레이트'],['피할 것','허리를 가리는 박시한 실루엣은 장점을 숨겨요'],['넥라인','V넥·스퀘어넥이 비율을 더 길게']] },
+  top_hourglass: { e:'☕', name:'윗동네 모래시계형', tag:'허리는 쏙, 위쪽이 조금 더 풍성한 곡선',
+    badge:'FFIT · Top hourglass', desc:'허리가 가슴보다 23cm 이상 가늘고, 가슴이 엉덩이보다 2.5~25cm 큰 체형이에요. 상체 볼륨이 있는 모래시계라, 시선을 아래로 내려 주는 코디가 균형을 맞춰요.',
+    fun:['첫인상이 든든하고 믿음직하다는 말을 들음. 사실 속은 소심할 때도 많음.','아침은 거르기 쉬운데 저녁은 거르지 못함. 야식 메뉴 고르기에 진지함.','리더로 뽑히는 일이 잦지만 정작 본인은 2인자 자리를 선호.'],
+    fit:[['상의','V넥·깊은 U넥, 단색 어두운 톤, 어깨 장식 없는 것'],['하의','A라인 스커트, 와이드·플레어 팬츠로 하체 볼륨'],['피할 것','퍼프 소매·보트넥·가슴 포켓은 위를 더 키워요'],['아우터','허리에서 살짝 벌어지는 코트']] },
+  bottom_hourglass: { e:'🍐', name:'아랫동네 모래시계형', tag:'허리는 쏙, 엉덩이가 가슴보다 조금 더 풍성한 곡선',
+    badge:'FFIT · Bottom hourglass', desc:'엉덩이가 가슴보다 9cm 이상 크고, 허리는 엉덩이보다 23cm 이상 가늘어요. 허리선은 뚜렷하고 하체가 풍성한 모래시계예요.',
+    fun:['앉아 있는 자리가 가장 편안한 사람. 집 소파에 애착이 깊음.','음식은 "따뜻한 국물"파. 추운 날 국밥 한 그릇에 하루가 풀림.','묵묵히 오래 가는 타입. 번개 모임보다 정기 모임.'],
+    fit:[['상의','밝은 색·패턴·디테일로 시선을 위로. 보트넥, 어깨선 강조'],['하의','어두운 단색, 스트레이트·약간 플레어. 하이웨이스트'],['피할 것','허벅지에 딱 붙는 스키니, 엉덩이 포켓 장식'],['원피스','핏앤플레어가 정석']] },
+  spoon: { e:'🥄', name:'스푼 곡선형', tag:'허리 바로 아래 윗엉덩이가 선반처럼 도드라지는 곡선',
+    badge:'FFIT · Spoon', desc:'엉덩이가 가슴보다 5cm 넘게 크고 허리와 18cm 이상 차이 나는데, 특히 허리 바로 아래 윗엉덩이가 허리의 1.19배 이상으로 급하게 넓어져요. 허리선이 뚜렷하고 골반이 선반처럼 느껴지는 체형이에요.',
+    fun:['바지 쇼핑이 매번 모험. "허리 맞으면 허벅지가, 허벅지 맞으면 허리가" 를 입에 달고 삶.','단것보다 짠것. 감자칩 한 봉지는 1인분이라 믿음.','정이 많고 챙기는 타입. 친구 생일을 캘린더 없이 기억함.'],
+    fit:[['상의','허리선까지 오는 길이, 어깨를 살짝 넓혀 주는 디테일'],['하의','허리에 고무밴드·다트가 있는 것, 플레어·와이드. 스트레치 소재'],['피할 것','허리 아래로 딱 떨어지는 로우라이즈, 뻣뻣한 데님'],['스커트','A라인·플리츠로 골반 선을 부드럽게']] },
+  triangle: { e:'🔺', name:'든든한 하체 삼각형', tag:'엉덩이가 가슴보다 넉넉하고 허리는 완만한 하체 중심형',
+    badge:'FFIT · Triangle', desc:'엉덩이가 가슴보다 9cm 이상 크고, 허리와 엉덩이 차이는 23cm 미만이에요. 하체가 든든하고 허리 굴곡은 완만한 체형이에요.',
+    fun:['스쿼트 자세를 가르쳐 준 적 없는데 이미 완벽함. 하체 운동은 사실 안 해도 됨(이라고 믿음).','국·밥·반찬 삼박자를 중시하는 한식 러버. 배달도 결국 한식.','한번 믿은 사람은 끝까지 믿는 의리형.'],
+    fit:[['상의','밝은 색, 가로 패턴, 어깨 장식·퍼프로 상체 볼륨'],['하의','어두운 단색 스트레이트·와이드. 밑단이 살짝 넓어지는 것'],['피할 것','하체에 밝은 색·큰 패턴, 종아리 중간에서 끝나는 길이'],['아우터','어깨선이 각 잡힌 재킷']] },
+  inverted_triangle: { e:'🔻', name:'수영선수 역삼각형', tag:'어깨·가슴이 넉넉하고 허리·엉덩이로 좁아지는 상체 중심형',
+    badge:'FFIT · Inverted triangle', desc:'가슴이 엉덩이보다 9cm 이상 크고, 가슴과 허리 차이는 23cm 미만이에요. 상체가 넓고 하체가 날렵한 체형이에요.',
+    fun:['"운동하세요?" 를 가장 많이 듣는 유형. 안 해도 들음.','단백질 챙긴다며 닭가슴살 사 놓고 결국 치킨. 그래도 단백질은 단백질.','추진력 있고 결정이 빠름. 메뉴 선정 담당.'],
+    fit:[['상의','V넥·라운드넥, 단색, 어깨선을 넘지 않는 소매'],['하의','밝은 색·패턴·와이드·카고로 하체 볼륨. 플레어 스커트'],['피할 것','퍼프·숄더패드·보트넥, 홀터넥'],['아우터','허리에서 벌어지는 A라인 코트']] },
+  rectangle: { e:'📏', name:'시크한 직선형', tag:'가슴·허리·엉덩이가 비슷한 폭의 모델 라인',
+    badge:'FFIT · Rectangle', desc:'가슴·허리·엉덩이 차이가 모두 작아요(가슴·엉덩이 차 9cm 미만, 허리 낙폭 23~25cm 미만). 직선적인 실루엣이라 옷의 라인을 그대로 보여 주는 체형이에요.',
+    fun:['옷이 마네킹처럼 걸림. 빈티지·오버핏도 소화. 본인은 "굴곡 없음"을 아쉬워함.','식사가 규칙적인 듬직한 생활형. 간식도 정해진 시간에.','감정 표현이 담담하지만 할 말은 다 함. 효율을 사랑함.'],
+    fit:[['상의','페플럼·러플·벨트로 허리선 만들기. 레이어드'],['하의','볼륨 있는 스커트, 플리츠, 와이드 팬츠'],['피할 것','위아래 모두 박시한 조합(직선이 더 강조)'],['원피스','벨티드·랩 원피스가 곡선을 만들어 줘요']] },
+  oval: { e:'🥚', name:'포근한 타원형', tag:'허리·복부가 가슴과 엉덩이보다 넉넉한 둥근 실루엣',
+    badge:'FFIT · Oval/Diamond', desc:'허리둘레가 가슴·엉덩이둘레보다 크거나 같아요. FFIT 의 타원·다이아몬드형을 묶은 것으로, 복부 중심의 둥근 실루엣이에요. 어깨와 다리 라인을 살리면 비율이 길어 보여요.',
+    fun:['사람을 편하게 하는 포근한 기운. 모임의 분위기 담당.','음식에 진심. 맛집 리스트가 누구보다 길고 정확함.','느긋해 보이지만 할 일은 다 해 놓는 반전 실행력.'],
+    fit:[['상의','V넥, 허리를 지나 엉덩이 위에서 끝나는 길이, 세로 라인'],['하의','스트레이트·부츠컷, 어두운 단색'],['피할 것','허리 밴딩이 조이는 것, 크롭, 가로 스트라이프'],['아우터','롱 가디건·롱 베스트로 세로 선']] },
+  m_inverted: { e:'🔻', name:'어깨 깡패 역삼각형', tag:'넓은 어깨·가슴에서 허리로 확 좁아지는 운동형',
+    badge:'남성 · Inverted triangle', desc:'상체(어깨·가슴)가 엉덩이보다 9cm 이상 크고, 허리보다 23cm 이상 커요. 가장 운동형에 가까운 실루엣이에요.',
+    fun:['"벤치 얼마 쳐요?" 가 인사. 안 쳐도 들음.','단백질 섭취량을 머릿속으로 계산하는 습관. 그러면서 라면은 끊지 못함.','먼저 나서서 끌고 가는 타입. 단체 사진에서 늘 가운데.'],
+    fit:[['상의','세미 슬림 핏, V넥·라운드넥. 어깨 패드·숄더 디테일은 피함'],['하의','스트레이트·테이퍼드. 밝은 색도 OK'],['피할 것','스키니 팬츠(상하체 대비 심화), 과한 오버핏 상의'],['아우터','허리선이 살짝 들어간 재킷']] },
+  m_trapezoid: { e:'🏛️', name:'균형 사다리꼴형', tag:'어깨가 엉덩이보다 살짝 넓고 허리가 들어간 균형형',
+    badge:'남성 · Trapezoid', desc:'상체가 엉덩이보다 2.5cm 이상 크고 허리보다 15cm 이상 커요. 역삼각형만큼 극적이지는 않지만 위아래 균형이 잡힌 체형이에요.',
+    fun:['"그냥 입어도 깔끔하다" 소리를 듣는 쇼핑 치트키 보유자.','식사는 배고프면 먹고 배부르면 멈추는 교과서형. 그래서 밤에 몰래 먹으면 티가 남.','무난하다는 말을 가장 싫어하지만 가장 많이 들음. 사실 중심 잡는 사람.'],
+    fit:[['상의','대부분 OK. 셔츠는 어깨선 맞는 레귤러 핏'],['하의','스트레이트·슬림 스트레이트'],['피할 것','특별히 없음. 지나친 오버핏만 조심'],['아우터','테일러드 재킷이 가장 잘 받아요']] },
+  m_rect: { e:'📏', name:'모델 직선형', tag:'어깨·허리·엉덩이 폭이 비슷한 날렵한 라인',
+    badge:'남성 · Rectangle', desc:'상체·허리·엉덩이 차이가 모두 작아요. 2023년 남성 체형 연구에서도 가장 흔한 유형(약 61%)으로 나온, 직선적인 실루엣이에요.',
+    fun:['오버핏·레이어드가 잘 받아 스트리트 룩 담당. 셋업도 잘 어울림.','식사량이 들쭉날쭉. 바쁘면 거르고 한가하면 두 끼를 한 번에.','조용히 관찰하다 한마디로 정리하는 타입.'],
+    fit:[['상의','레이어드로 입체감, 가슴 포켓·가로 스트라이프 OK'],['하의','스트레이트·와이드. 밑단 롤업'],['피할 것','위아래 모두 타이트한 조합'],['아우터','숄더가 각 잡힌 재킷, 오버핏 코트']] },
+  m_triangle: { e:'🔺', name:'하체 장인 삼각형', tag:'엉덩이·허벅지가 어깨보다 든든한 하체 중심형',
+    badge:'남성 · Triangle', desc:'엉덩이가 상체보다 9cm 이상 커요. 하체가 든든한 실루엣으로, 어깨선을 살리면 균형이 맞아요.',
+    fun:['등산·자전거·축구 중 하나는 반드시 함. 계단은 두 칸씩.','밥 양이 넉넉한 편. 공깃밥 추가는 기본 옵션.','한번 맡은 일은 끝까지 밀고 가는 뚝심형.'],
+    fit:[['상의','어깨선·가슴을 살리는 구조적 재킷, 밝은 색'],['하의','어두운 단색 스트레이트. 밑단이 좁아지지 않는 것'],['피할 것','스키니·조거(하체 강조), 밝은 색 하의'],['아우터','패딩 조끼·숄더 디테일로 상체 볼륨']] },
+  m_oval: { e:'🥚', name:'곰돌이 타원형', tag:'허리·복부가 가슴·엉덩이보다 넉넉한 둥근 실루엣',
+    badge:'남성 · Oval', desc:'허리둘레가 상체·엉덩이둘레보다 크거나 같아요. 복부 중심의 둥근 실루엣으로, 세로 라인과 어깨선을 살리면 비율이 길어 보여요.',
+    fun:['옆에 있으면 안심되는 사람. 조카·강아지한테 인기 1위.','회식의 꽃. 메뉴 선정과 분위기 둘 다 책임짐.','여유 있어 보이지만 챙길 건 다 챙기는 살림꾼.'],
+    fit:[['상의','V넥·헨리넥, 어깨에 맞는 레귤러 핏. 세로 스트라이프'],['하의','스트레이트, 허리는 벨트보다 밴딩·서스펜더'],['피할 것','타이트 상의, 가로 스트라이프, 짧은 상의 길이'],['아우터','롱 코트·롱 가디건으로 세로 선']] },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+const $ = (id) => document.getElementById(id);
+let gender = null;
+
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  gender = b.dataset.g;
+  document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  const male = gender === 'm';
+  $('l-bust').firstChild.textContent = male ? '가슴둘레' : '가슴둘레';
+  $('l-shoulder').style.display = male ? '' : 'none';
+  $('in-shoulder').style.display = male ? '' : 'none';
+  $('l-highhip').style.display = male ? 'none' : '';
+  $('in-highhip').style.display = male ? 'none' : '';
+  $('step1').classList.add('hidden');
+  $('step2').classList.remove('hidden');
+  $('bust').focus();
+}));
+$('back1').addEventListener('click', () => { $('step2').classList.add('hidden'); $('step1').classList.remove('hidden'); });
+
+function num(id) { const v = parseFloat($(id).value); return Number.isFinite(v) ? v : null; }
+$('go').addEventListener('click', () => {
+  const b = num('bust'), w = num('waist'), h = num('hip'), hh = num('highhip'), sh = num('shoulder');
+  const bad = [];
+  if (b === null || b < 50 || b > 200) bad.push('가슴둘레');
+  if (w === null || w < 40 || w > 200) bad.push('허리둘레');
+  if (h === null || h < 50 || h > 200) bad.push('엉덩이둘레');
+  if (bad.length) { $('err').textContent = bad.join(', ') + '를 cm 숫자로 넣어 주세요 (40~200).'; return; }
+  $('err').textContent = '';
+  const type = gender === 'm' ? classifyM(b, w, h, sh) : classifyF(b, w, h, hh);
+  render(type, w / h);
+  history.replaceState(null, '', '#t=' + type);   // 치수는 주소에 담지 않는다 — 유형만
+});
+
+function render(type, whr) {
+  const t = TYPES[type]; if (!t) return;
+  $('r-emoji').textContent = t.e; $('r-name').textContent = t.name; $('r-tag').textContent = t.tag; $('r-badge').textContent = t.badge;
+  $('r-desc').textContent = t.desc;
+  $('r-fun').innerHTML = t.fun.map(x => '<li>' + x + '</li>').join('');
+  $('r-fit').innerHTML = t.fit.map(([k, v]) => '<b>' + k + '</b><span>' + v + '</span>').join('');
+  const hb = $('r-health');
+  if (whr && Number.isFinite(whr)) {
+    const male = type.startsWith('m_'); const cut = male ? 0.90 : 0.85;
+    const r = whr.toFixed(2); const over = whr > cut;
+    hb.className = 'health' + (over ? ' w' : '');
+    hb.innerHTML = '<div class="n">' + r + '</div>' + (over
+      ? '허리/엉덩이 비율이 WHO 기준(' + cut.toFixed(2) + ')보다 높아요. 복부 쪽에 지방이 모이는 경향일 수 있어요. 숫자 하나로 판단하지 말고, 신경 쓰이면 건강검진 때 허리둘레·혈압·혈당과 함께 보세요.'
+      : '허리/엉덩이 비율이 WHO 기준(' + cut.toFixed(2) + ') 안쪽이에요. 지방이 복부에 몰리는 쪽은 아니라는 뜻이에요. 그래도 체질량·허리둘레와 함께 보는 게 정확해요.');
+  } else {
+    hb.className = 'health'; hb.textContent = '치수를 넣으면 허리/엉덩이 비율을 함께 계산해 드려요.';
+  }
+  $('step1').classList.add('hidden'); $('step2').classList.add('hidden'); $('result').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+$('retry').addEventListener('click', () => {
+  history.replaceState(null, '', location.pathname);
+  $('result').classList.add('hidden'); $('step1').classList.remove('hidden');
+  ['bust','waist','hip','highhip','shoulder'].forEach(id => $(id).value = '');
+  window.scrollTo({ top: 0 });
+});
+
+$('share').addEventListener('click', async () => {
+  const url = location.origin + location.pathname + location.hash;
+  const text = '나는 "' + $('r-name').textContent + '" 이래요! 내 체형 유형 테스트 👉';
+  try {
+    if (navigator.share) { await navigator.share({ title: '내 체형은 무슨 유형?', text, url }); return; }
+    await navigator.clipboard.writeText(text + ' ' + url); toast('링크를 복사했어요');
+  } catch (e) { toast('공유를 취소했어요'); }
+});
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 1800); }
+
+// 공유 링크로 들어온 경우 — 유형 카드만 보여 준다(치수 없음). 다시 하기로 본인 테스트.
+const m = location.hash.match(/t=([a-z_]+)/);
+if (m && TYPES[m[1]]) render(m[1], null);
+</script>
+</body>
+</html>
