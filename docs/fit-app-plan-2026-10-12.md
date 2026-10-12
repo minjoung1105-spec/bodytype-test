@@ -1,5 +1,8 @@
 # 핏 분석 앱 계획 — 2026-10-12 (사용자 결정)
 
+> **앱 이름: 딱핏 (Ddakfit, `com.ziafuture.ddakfit`)** — 2026-10-12 시작. 저장소 [minjoung1105-spec/ddakfit](https://github.com/minjoung1105-spec/ddakfit), 이후 계획은 그쪽 `docs/plan-2026-10-12.md` 에서 관리한다.
+> 체형 판정은 이 저장소의 `site/index.html` 이 기준이다 — 규칙을 바꾸면 딱핏의 `tool/gen_body_type.js` 로 앱 데이터·골든을 다시 만든다.
+
 체형 테스트 웹페이지(이 저장소)의 다음 단계. **필링데이가 자리 잡은 뒤** 시작한다.
 
 ## 결정 (2026-10-12 대화)
