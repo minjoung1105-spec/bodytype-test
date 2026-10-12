@@ -5,6 +5,7 @@
 
 - 공개 주소: https://minjoung1105-spec.github.io/bodytype-test/ (main 머지 시 GitHub Pages 로 자동 배포)
 - 왜 만들었나(2026-10-12): "신체치수 → 체형 → 원하는 핏의 옷 추천" 앱의 첫 조각. 옷 치수 데이터는 크롤링 없이 얻기 어려워 앱은 보류하고, 체형 유형 테스트부터 웹으로 먼저 낸다.
+- 다음 앱(치수표 사진 → 핏 분석) 계획과 법적 결정: [docs/fit-app-plan-2026-10-12.md](docs/fit-app-plan-2026-10-12.md)
 
 ## 분류 근거
 - 여성 9유형: **FFIT**(Female Figure Identification Technique for Apparel; Simmons·Istook·Devarajan 2004, 수식 Lee·Istook·Nam·Park 2007). 인치 차이 규칙(가슴·엉덩이 차 3.6in, 가슴–허리 9in, 엉덩이–허리 10in, 윗엉덩이/허리 1.193)을 cm 입력에서 변환해 쓴다. 타원·다이아몬드는 "허리가 가슴·엉덩이보다 큰 경우" 로 묶었다(플러스사이즈 수정 연구 방식).
