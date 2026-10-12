@@ -99,8 +99,8 @@
     <label class="f" id="l-bust">가슴둘레<small>가장 볼록한 지점을 수평으로 한 바퀴</small></label>
     <div class="in"><input id="bust" type="number" inputmode="decimal" min="50" max="200" step="0.5" placeholder="예: 88"><span class="u">cm</span></div>
 
-    <label class="f" id="l-shoulder" style="display:none">어깨둘레<small>양 어깨 끝을 지나 몸 전체를 한 바퀴 (선택)</small></label>
-    <div class="in" id="in-shoulder" style="display:none"><input id="shoulder" type="number" inputmode="decimal" min="60" max="220" step="0.5" placeholder="예: 112"><span class="u">cm</span></div>
+    <label class="f" id="l-shoulder">어깨너비 <small>한쪽 어깨 끝에서 반대쪽 어깨 끝까지 직선(옷 치수표의 "어깨너비"). 비워도 됩니다 — 어깨 라인 메모와 소매·재킷 조언에 쓰여요.</small></label>
+    <div class="in" id="in-shoulder"><input id="shoulder" type="number" inputmode="decimal" min="25" max="70" step="0.5" placeholder="선택 · 예: 40"><span class="u">cm</span></div>
 
     <label class="f">허리둘레<small>갈비뼈 아래와 골반뼈 위의 중간, 가장 가는 곳</small></label>
     <div class="in"><input id="waist" type="number" inputmode="decimal" min="40" max="200" step="0.5" placeholder="예: 70"><span class="u">cm</span></div>
@@ -135,6 +135,7 @@
 
     <h2>이 핏이 잘 받아요 <span class="tag">스타일</span></h2>
     <div class="fit" id="r-fit"></div>
+    <div class="teaser hidden" id="r-shoulder" style="margin-top:12px;background:#f7f3ff"></div>
 
     <h2>허리·엉덩이 비율 메모 <span class="tag sci">건강</span></h2>
     <div class="health" id="r-health"></div>
@@ -153,6 +154,7 @@
     <summary>어떻게 나누나요? (출처)</summary>
     <p>여성 기준은 미국 노스캐롤라이나주립대 연구진이 3D 신체 스캔으로 만든 <b>FFIT(Female Figure Identification Technique for Apparel)</b>의 9가지 체형 분류를 따릅니다(Simmons·Istook·Devarajan, 2004; 수식화는 Lee·Istook·Nam·Park, 2007). 가슴·허리·엉덩이 차이를 인치 기준으로 보기 때문에 cm 입력을 변환해 판정합니다. 후속 연구는 치수 재는 위치에 따라 결과가 달라질 수 있고(Manchester, 2021), 플러스사이즈에서는 분류가 어긋날 수 있다고 지적합니다(Sokolowski 외, 2020). 그래서 이 테스트는 <b>재미와 참고용</b>입니다.</p>
     <p>남성 기준은 학계에 통일된 분류가 없어, 패션 업계에서 널리 쓰는 5가지 체형(역삼각·사다리꼴·직선·삼각·타원)을 같은 치수 차이 규칙으로 나눕니다. 2023년 남성 상체 연구(Journal of Engineered Fibers and Fabrics)에서는 직선형이 가장 많고 역삼각형에 가까운 유형이 그다음으로 많았습니다.</p>
+    <p>어깨너비는 FFIT 분류에 들어가지 않습니다(그래서 선택 입력). 2021년 Manchester 연구가 "옷 제작에 중요한 어깨가 FFIT 에 빠져 있다" 고 지적한 것을 참고해, 어깨너비÷엉덩이둘레로 넓은·보통·좁은 어깨 라인을 따로 보여 줍니다. 이 비율 기준은 학술 수치가 아니라 참고용입니다.</p>
     <p>허리/엉덩이 비율 기준은 WHO 전문가 회의(2008)의 여성 0.85·남성 0.90입니다. 동아시아인에게는 더 낮은 기준이 제안되기도 합니다.</p>
     <p>참고: <a href="https://repository.lib.ncsu.edu/items/35fb969e-9394-4307-8799-e42f957e76b8" target="_blank" rel="noopener">FFIT 검증 연구(NCSU)</a> · <a href="https://research.manchester.ac.uk/en/publications/assessing-the-female-figure-identification-techniques-reliability/" target="_blank" rel="noopener">FFIT 신뢰성 평가(Manchester, 2021)</a> · <a href="https://scholarsbank.uoregon.edu/xmlui/handle/1794/25863" target="_blank" rel="noopener">플러스사이즈 FFIT 수정(2020)</a> · <a href="https://doaj.org/article/1580506fc73144bead81e92f9bb91495" target="_blank" rel="noopener">남성 상체 체형 연구(2023)</a> · <a href="https://www.healthline.com/health/waist-to-hip-ratio" target="_blank" rel="noopener">허리/엉덩이 비율(Healthline)</a></p>
   </details>
@@ -182,15 +184,25 @@ function classifyF(b, w, h, hh) {
   return 'rectangle';
 }
 // 남성: 같은 인치 차이 규칙을 가슴(또는 어깨)·허리·엉덩이에 적용. 학계 표준이 없어 업계 5분류를 쓴다.
-function classifyM(c, w, h, sh) {
-  const top = sh ? Math.max(sh - 20, c) : c;   // 어깨둘레는 가슴둘레보다 보통 20cm 쯤 크다 — 보정해 상체 폭으로 쓴다
-  const T = top / IN, W = w / IN, H = h / IN;
+function classifyM(c, w, h) {
+  const T = c / IN, W = w / IN, H = h / IN;
   const th = T - H, ht = H - T, tw = T - W;
   if (W >= T && W >= H) return 'm_oval';
   if (th >= 3.6 && tw >= 9) return 'm_inverted';
   if (th >= 1 && tw >= 6) return 'm_trapezoid';
   if (ht >= 3.6) return 'm_triangle';
   return 'm_rect';
+}
+
+// 어깨 라인: 어깨너비(직선) ÷ 엉덩이둘레. 평균 부근(여 0.40, 남 0.45)을 중심으로 넓은/보통/좁은 으로 나눈다.
+//   FFIT 는 어깨를 쓰지 않아 유형 분류에는 넣지 않고, 소매·재킷 조언을 덧붙이는 데만 쓴다. 학술 기준이 아닌 참고 수치.
+function shoulderLine(sw, hip, male) {
+  if (!sw || !hip) return null;
+  const r = sw / hip;
+  const wide = male ? 0.48 : 0.43, narrow = male ? 0.42 : 0.37;
+  if (r >= wide) return { k: 'wide', r, t: '어깨가 엉덩이보다 넓은 편', tip: '재킷·셔츠는 어깨너비를 먼저 맞추고 몸통은 수선. 래글런·드롭숄더가 편하고, 퍼프·숄더패드는 피해요.' };
+  if (r <= narrow) return { k: 'narrow', r, t: '어깨가 엉덩이보다 좁은 편', tip: '각 잡힌 어깨선, 보트넥, 가로 패턴 상의가 어깨를 살려요. 드롭숄더는 더 좁아 보일 수 있어요.' };
+  return { k: 'even', r, t: '어깨와 엉덩이가 균형', tip: '어깨선이 딱 맞는 레귤러 핏이 가장 잘 받아요. 소매 길이만 신경 쓰면 됩니다.' };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -258,9 +270,6 @@ document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click'
   gender = b.dataset.g;
   document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   const male = gender === 'm';
-  $('l-bust').firstChild.textContent = male ? '가슴둘레' : '가슴둘레';
-  $('l-shoulder').style.display = male ? '' : 'none';
-  $('in-shoulder').style.display = male ? '' : 'none';
   $('l-highhip').style.display = male ? 'none' : '';
   $('in-highhip').style.display = male ? 'none' : '';
   $('step1').classList.add('hidden');
@@ -278,13 +287,16 @@ $('go').addEventListener('click', () => {
   if (h === null || h < 50 || h > 200) bad.push('엉덩이둘레');
   if (bad.length) { $('err').textContent = bad.join(', ') + '를 cm 숫자로 넣어 주세요 (40~200).'; return; }
   $('err').textContent = '';
-  const type = gender === 'm' ? classifyM(b, w, h, sh) : classifyF(b, w, h, hh);
-  render(type, w / h);
+  const type = gender === 'm' ? classifyM(b, w, h) : classifyF(b, w, h, hh);
+  render(type, w / h, shoulderLine(sh, h, gender === 'm'));
   history.replaceState(null, '', '#t=' + type);   // 치수는 주소에 담지 않는다 — 유형만
 });
 
-function render(type, whr) {
+function render(type, whr, sl) {
   const t = TYPES[type]; if (!t) return;
+  const slBox = $('r-shoulder');
+  if (sl) { slBox.classList.remove('hidden'); slBox.innerHTML = '<b>어깨 라인 — ' + sl.t + '</b> (어깨너비÷엉덩이둘레 ' + sl.r.toFixed(2) + ')<br>' + sl.tip; }
+  else slBox.classList.add('hidden');
   $('r-emoji').textContent = t.e; $('r-name').textContent = t.name; $('r-tag').textContent = t.tag; $('r-badge').textContent = t.badge;
   $('r-desc').textContent = t.desc;
   $('r-fun').innerHTML = t.fun.map(x => '<li>' + x + '</li>').join('');
